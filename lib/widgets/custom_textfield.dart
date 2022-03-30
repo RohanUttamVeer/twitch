@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textInputAction: TextInputAction.next,
       controller: controller,
       decoration: const InputDecoration(
         focusedBorder: OutlineInputBorder(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:twitch/resources/auth_method.dart';
+import 'package:twitch/screens/home_screen.dart';
 import 'package:twitch/widgets/custom_buttons.dart';
 import 'package:twitch/widgets/custom_textfield.dart';
 
@@ -13,8 +15,23 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthMethods _authMethods = AuthMethods();
+
+  void signUpUser() async {
+    bool res = await _authMethods.signUpUser(
+      context,
+      _emailController.text,
+      _usernameController.text,
+      _passwordController.text,
+    );
+
+    if (res) {
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -39,18 +56,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: CustomTextField(controller: _emailController),
-              ),
-              const SizedBox(height: 20.0),
-              const Text(
-                'password',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: CustomTextField(controller: _passwordController),
+                child: CustomTextField(controller: _emailController,),
               ),
               const SizedBox(height: 20.0),
               const Text(
@@ -64,7 +70,21 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: CustomTextField(controller: _usernameController),
               ),
               const SizedBox(height: 20.0),
-              CustomButtons(text: 'Sign Up', onTap: () {},),
+              const Text(
+                'password',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: CustomTextField(controller: _passwordController),
+              ),
+              const SizedBox(height: 20.0),
+              CustomButtons(
+                text: 'Sign Up',
+                onTap: signUpUser,
+              ),
             ],
           ),
         ),
